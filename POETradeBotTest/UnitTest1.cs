@@ -9,11 +9,11 @@ namespace POETradeBotTest
     [TestClass]
     public class UnitTest1
     {
-        [TestMethod]
+        [TestMethod]    
         public void TestMethod1()
         {
             Reader reader = new Reader();
-            var output = reader.checkImage(@"D:\code\POETradeBot\POETradeBot\Capture.PNG");
+            var output = reader.CheckImage(@"D:\code\POETradeBot\POETradeBot\Capture.PNG");
             Assert.Equal("", output);
         }
     }
