@@ -13,32 +13,52 @@ namespace POETradeBot
 {
     class CommandLine
     {
+        private readonly bool _debug;
         private readonly Reader _reader;
         private readonly Rectangle _chatBoxBounds;
 
-        public CommandLine(Reader reader, Rectangle chatBoxBounds)
+        public CommandLine(Reader reader, Rectangle chatBoxBounds,bool debug)
         {
             this._reader = reader;
             this._chatBoxBounds = chatBoxBounds;
+            this._debug = debug;
         }
 
         public void listenChat()
         {
             while (true)
             {
-                Bitmap bmp = new Bitmap(_chatBoxBounds.Width, _chatBoxBounds.Height);
-                Graphics g = Graphics.FromImage(bmp);
-                g.CopyFromScreen(_chatBoxBounds.Left, _chatBoxBounds.Top, _chatBoxBounds.Right, _chatBoxBounds.Bottom, bmp.Size, CopyPixelOperation.SourceCopy);
-                Page page = _reader.GetTesseract().Process(PixConverter.ToPix(bmp));
+                Rectangle bounds = Screen.GetBounds(Point.Empty);
+                using (Bitmap bmp = new Bitmap(bounds.Width, bounds.Height))
+                {
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
+                        g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+                        using (Page page = _reader.GetTesseract().Process(bmp))
+                        {
 
-                Console.WriteLine(page.GetText());
-                page.Dispose();
+                            if (_debug)
+                            {
+                                bmp.Save("currentImage.png", System.Drawing.Imaging.ImageFormat.Png);
+                                Console.WriteLine(page.GetText());
+                                Console.ReadLine();
+                            }
+                            Console.WriteLine(page.GetText());
+                        }
+                        
+                    }
+                    
+                }
                 Thread.Sleep(300);
             }
         }
 
         public static void Main(String[] args)
         {
+            Reader reader = new Reader();
+            var thong = reader.CheckImage(@"D:\code\POETradeBot\POETradeBotTest\testdata\test4.PNG");
+            Console.WriteLine(thong);
+
             var thing = ConsoleKey.Escape;
             while (thing != ConsoleKey.Enter)
             {
@@ -54,9 +74,9 @@ namespace POETradeBot
                 thing = Console.ReadKey().Key;
             }
             var point2 = Cursor.Position;
-
-            
-            new CommandLine(new Reader(), new Rectangle(point1.X, point1.Y, point2.X - point1.X, point2.Y - point1.Y)).listenChat();
+            bool debug = false;
+            if (Console.ReadLine().Equals("Debug")) debug = true;
+            new CommandLine(new Reader(), new Rectangle(point1.X, point1.Y, point2.X - point1.X, point2.Y - point1.Y), debug).listenChat();
         }
     }
 }
