@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 using Tesseract;
+using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace POETradeBot
 {
@@ -16,31 +18,31 @@ namespace POETradeBot
         private readonly bool _debug;
         private readonly Reader _reader;
         private readonly Rectangle _chatBoxBounds;
+        private readonly double _zoomfactor;
 
         public CommandLine(Reader reader, Rectangle chatBoxBounds,bool debug)
         {
             this._reader = reader;
             this._chatBoxBounds = chatBoxBounds;
             this._debug = debug;
+            _zoomfactor = GetWindowsScaling();
         }
 
         public void listenChat()
         {
             while (true)
             {
-                Rectangle bounds = Screen.GetBounds(Point.Empty);
-                using (Bitmap bmp = new Bitmap(bounds.Width, bounds.Height))
+                using (Bitmap bmp = new Bitmap(_chatBoxBounds.Width, _chatBoxBounds.Height))
                 {
                     using (Graphics g = Graphics.FromImage(bmp))
                     {
-                        g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+                        g.CopyFromScreen(new Point(_chatBoxBounds.Left, _chatBoxBounds.Top), Point.Empty, bmp.Size, CopyPixelOperation.SourceCopy);
                         using (Page page = _reader.GetTesseract().Process(bmp))
                         {
 
                             if (_debug)
                             {
                                 bmp.Save("currentImage.png", System.Drawing.Imaging.ImageFormat.Png);
-                                Console.WriteLine(page.GetText());
                                 Console.ReadLine();
                             }
                             Console.WriteLine(page.GetText());
@@ -53,6 +55,11 @@ namespace POETradeBot
             }
         }
 
+        public static double GetWindowsScaling()
+        {
+            return Screen.PrimaryScreen.Bounds.Width / SystemParameters.PrimaryScreenWidth;
+        }
+
         public static void Main(String[] args)
         {
             Reader reader = new Reader();
@@ -62,7 +69,7 @@ namespace POETradeBot
             var thing = ConsoleKey.Escape;
             while (thing != ConsoleKey.Enter)
             {
-                Console.WriteLine("press enter while the cursor is over the bottom left corner of the chat");
+                Console.WriteLine("press enter while the cursor is over the top left corner of the chat");
                 thing = Console.ReadKey().Key;
             }
             var point1 = Cursor.Position;
@@ -70,11 +77,19 @@ namespace POETradeBot
             thing = ConsoleKey.Escape;
             while (thing != ConsoleKey.Enter)
             {
-                Console.WriteLine("press enter while the cursor is over the top right corner of the chat");
+                Console.WriteLine("press enter while the cursor is over the bottom right corner of the chat");
                 thing = Console.ReadKey().Key;
             }
             var point2 = Cursor.Position;
             bool debug = false;
+            
+            //Adjust the captured points for screen zoom
+            var zoomfactor = GetWindowsScaling();
+            point1.X = (int) (point1.X * zoomfactor);
+            point1.Y = (int) (point1.Y * zoomfactor);
+            point2.X = (int) (point2.X * zoomfactor);
+            point2.Y = (int) (point2.Y * zoomfactor);
+            
             if (Console.ReadLine().Equals("Debug")) debug = true;
             new CommandLine(new Reader(), new Rectangle(point1.X, point1.Y, point2.X - point1.X, point2.Y - point1.Y), debug).listenChat();
         }
