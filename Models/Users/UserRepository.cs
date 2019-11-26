@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static POETestBot.Models.Response;
 
-namespace Models.Messages
+namespace POETestBot.Models
 {
     class UserRepository : IUserRepository
     {
@@ -36,18 +36,18 @@ namespace Models.Messages
             _context.Users.Add(entity);
             await _context.SaveChangesAsync();
 
-            return (Created , entity.Id);
+            return (Created , entity.ID);
         }
 
         public async Task<Response> DeleteAsync(int userId, bool force = false)
         {
-            var entity = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var entity = await _context.Users.FirstOrDefaultAsync(u => u.ID == userId);
             if(entity == null)
             {
                 return NotFound;
             }
 
-            if(entity.Items.Any() && !force)
+            if (entity.Items.Any() && !force)
             {
                 return Conflict;
             }
@@ -65,22 +65,56 @@ namespace Models.Messages
                         orderby u.Name
                         select new UserListDTO
                         {
-                            Id = u.Id,
+                            Id = u.ID,
                             Name = u.Name
                         };
             return await query.ToListAsync();
         }
 
-        public Task<UserMessagesDTO> ReadAsync(int userId)
+        public async Task<UserMessagesDTO> ReadMessagesAsync(int userId)
         {
-            throw new NotImplementedException();
+            var userMessagesDTO = from u in _context.Users
+                        where u.ID == userId
+                        select new UserMessagesDTO
+                        {
+                            UserID = u.ID,
+                            Name = u.Name,
+                            Messages = u.Messages
+                        };
+
+            return await userMessagesDTO.FirstOrDefaultAsync();
         }
 
-        public Task<Response> UpdateAsync(UserUpdateDTO user)
+        public async Task<UserItemsDTO> ReadItemsAsync(int userId)
         {
-            throw new NotImplementedException();
+            var userItemsDTO = from u in _context.Users
+                                  where u.ID == userId
+                                  select new UserItemsDTO
+                                  {
+                                      UserID = u.ID,
+                                      Name = u.Name,
+                                      Items = u.Items
+                                  };
+
+            return await userItemsDTO.FirstOrDefaultAsync();
         }
 
-        private async Task<bool> UserExists(int userId, string emailAddress) => await _context.Users.AnyAsync(u => u.Id != userId);
+        public async Task<Response> UpdateAsync(UserUpdateDTO user)
+        {
+            var entity = await _context.Users.FindAsync(user.ID);
+
+            if (entity == null)
+            {
+                return NotFound;
+            }
+
+            entity.passwordHash = user.passwordHash;
+
+            await _context.SaveChangesAsync();
+
+            return Updated;
+        }
+
+        private async Task<bool> UserExists(int userId, string username) => await _context.Users.AnyAsync(u => u.ID != userId && u.Name == username);
     }
 }

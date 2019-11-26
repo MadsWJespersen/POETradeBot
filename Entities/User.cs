@@ -6,7 +6,7 @@ namespace POETestBot.Entities
     public class User
     {
         [Required]
-        public int Id { get; set; }
+        public int ID { get; set; }
 
         [Required]
         [StringLength(23)]

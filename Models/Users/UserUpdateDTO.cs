@@ -1,8 +1,8 @@
 ﻿namespace POETestBot.Models
 {
-    public class UserUpdateDTO : UserCreateDTO
+    public class UserUpdateDTO
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string passwordHash { get; set; }
     }
 }

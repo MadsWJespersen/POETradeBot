@@ -19,12 +19,24 @@ namespace POETestBot.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
-                        .HasKey(u => u.Id);
+                        .HasKey(u => u.ID);
+
+            modelBuilder.Entity<Message>()
+                        .HasKey(m => m.ID);
+
+            modelBuilder.Entity<Item>()
+                        .HasKey(i => i.ID);
 
             modelBuilder.Entity<User>()
                         .HasMany(u => u.Messages)
-                        .WithOne(m => m.SentBy);
-                        
+                        .WithOne(m => m.sentBy)
+                        .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<User>()
+                        .HasMany(u => u.Items)
+                        .WithOne(i => i.owner)
+                        .OnDelete(DeleteBehavior.SetNull);
+
         }
     }
 }

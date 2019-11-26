@@ -112,10 +112,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Items\IItemRepository.cs" />
+    <Compile Include="Items\ItemCreateDTO.cs" />
+    <Compile Include="Items\ItemListDTO.cs" />
+    <Compile Include="Items\ItemRepository.cs" />
+    <Compile Include="Items\ItemUpdateDTO.cs" />
+    <Compile Include="Messages\IMessageRepository.cs" />
+    <Compile Include="Messages\MessageDetailsDTO.cs" />
+    <Compile Include="Messages\MessageListDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="Users\IUserRepository.cs" />
     <Compile Include="Users\UserCreateDTO.cs" />
+    <Compile Include="Users\UserItemsDTO.cs" />
     <Compile Include="Users\UserListDTO.cs" />
     <Compile Include="Users\UserMessagesDTO.cs" />
     <Compile Include="Users\UserRepository.cs" />
@@ -131,5 +140,6 @@
       <Name>Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
