@@ -10,6 +10,7 @@ using System.Drawing.Imaging;
 using Tesseract;
 using System.Runtime.InteropServices;
 using System.Windows;
+using POETestBot;
 
 namespace POETradeBot
 {
@@ -46,6 +47,9 @@ namespace POETradeBot
                                 Console.ReadLine();
                             }
                             Console.WriteLine(page.GetText());
+                            Console.WriteLine(page.GetText().Replace("\n", " "));
+                            
+                            Console.WriteLine(MessageBuilder.ReadMessage(page.GetText().Replace("\n"," ")));
                         }
                         
                     }

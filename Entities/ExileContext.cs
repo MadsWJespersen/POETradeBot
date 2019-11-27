@@ -11,6 +11,8 @@ namespace POETestBot.Entities
     {
         public DbSet<Message> Messages { get; set; }
         public DbSet<User> Users { get; set; }
+
+        public DbSet<Item> Items { get; set; }
         public ExileContext(DbContextOptions<ExileContext> options)
                : base(options)
         {

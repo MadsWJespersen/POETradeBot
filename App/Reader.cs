@@ -14,7 +14,7 @@ namespace POETradeBot
         private readonly TesseractEngine _ocr;
         public Reader()
         {
-            _ocr = new TesseractEngine(@"D:\code\POETradeBot\POETradeBot\tessdata", "eng", EngineMode.Default);
+            _ocr = new TesseractEngine(@"D:\code\POETradeBot\tessdata", "eng", EngineMode.Default);
         }
 
         public string CheckImage(string path)
@@ -23,7 +23,6 @@ namespace POETradeBot
             StringBuilder output = new StringBuilder();
 
             output.Append(words.GetText());
-
 
             return output.ToString();
         }
