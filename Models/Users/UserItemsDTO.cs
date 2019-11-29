@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace POETestBot.Models
 {
-    class UserItemsDTO
+    class UserItemsDTO : DTO
     {
         [Required]
         public int UserID { get; set; }

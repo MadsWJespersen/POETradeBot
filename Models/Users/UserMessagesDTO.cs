@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace POETestBot.Models
 {
-    public class UserMessagesDTO
+    public class UserMessagesDTO : DTO
     {
         [Required]
         public int UserID { get; set; }

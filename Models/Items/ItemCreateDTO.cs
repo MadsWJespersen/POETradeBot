@@ -1,6 +1,7 @@
 ﻿namespace POETestBot.Models
 {
-    public class ItemCreateDTO
+    public class ItemCreateDTO : DTO
     {
+
     }
 }

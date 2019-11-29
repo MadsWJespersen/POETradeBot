@@ -1,6 +1,6 @@
 ﻿namespace POETestBot.Models
 {
-    public class MessageDetailsDTO
+    public class MessageDetailsDTO : DTO
     {
     }
 }

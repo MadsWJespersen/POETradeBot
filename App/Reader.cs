@@ -9,7 +9,7 @@ using Tesseract;
 
 namespace POETradeBot
 {
-    public class Reader
+    public class Reader :IDisposable
     {
         private readonly TesseractEngine _ocr;
         public Reader()
@@ -25,6 +25,11 @@ namespace POETradeBot
             output.Append(words.GetText());
 
             return output.ToString();
+        }
+
+        public void Dispose()
+        {
+            _ocr.Dispose();
         }
 
         public TesseractEngine GetTesseract()

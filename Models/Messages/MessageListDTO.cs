@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace POETestBot.Models
 {
-    public class MessageListDTO
+    public class MessageListDTO : DTO
     {
         public int Id { get; set; }
         public string timestamp { get; set; }

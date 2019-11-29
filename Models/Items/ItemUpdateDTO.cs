@@ -2,7 +2,7 @@
 
 namespace POETestBot.Models
 {
-    public class ItemUpdateDTO
+    public class ItemUpdateDTO : DTO
     {
         [Required]
         public int ID { get; set; }

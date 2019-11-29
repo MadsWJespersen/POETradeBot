@@ -134,6 +134,10 @@
       <Project>{251C40D4-E3BE-4324-A479-664389B4330A}</Project>
       <Name>Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{F5438367-564C-4EE0-90A9-F8881F5A1851}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Tesseract.4.1.0-beta1\build\Tesseract.targets" Condition="Exists('packages\Tesseract.4.1.0-beta1\build\Tesseract.targets')" />

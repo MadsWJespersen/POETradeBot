@@ -112,7 +112,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO.cs" />
     <Compile Include="Items\IItemRepository.cs" />
+    <Compile Include="Items\ItemBuyDTO.cs" />
     <Compile Include="Items\ItemCreateDTO.cs" />
     <Compile Include="Items\ItemListDTO.cs" />
     <Compile Include="Items\ItemRepository.cs" />

@@ -19,14 +19,12 @@ namespace POETradeBot
         private readonly bool _debug;
         private readonly Reader _reader;
         private readonly Rectangle _chatBoxBounds;
-        private readonly double _zoomfactor;
 
         public CommandLine(Reader reader, Rectangle chatBoxBounds,bool debug)
         {
             this._reader = reader;
             this._chatBoxBounds = chatBoxBounds;
             this._debug = debug;
-            _zoomfactor = GetWindowsScaling();
         }
 
         public void listenChat()
@@ -46,10 +44,23 @@ namespace POETradeBot
                                 bmp.Save("currentImage.png", System.Drawing.Imaging.ImageFormat.Png);
                                 Console.ReadLine();
                             }
-                            Console.WriteLine(page.GetText());
-                            Console.WriteLine(page.GetText().Replace("\n", " "));
                             
-                            Console.WriteLine(MessageBuilder.ReadMessage(page.GetText().Replace("\n"," ")));
+                            Console.WriteLine(page.GetText());
+                            var text = page.GetText().Replace("\n", " ");
+                            var textAfter = new StringBuilder();
+                            for(int i = 0; i < text.Length; i++)
+                            {
+                                if (text[i] != '"')
+                                {
+                                    textAfter.Append(text[i]);
+                                }
+                            }
+                            Console.WriteLine(textAfter.ToString());
+                            var arr = textAfter.ToString().Split('@');
+                            foreach(string message in arr)
+                            {
+                                Console.WriteLine(MessageBuilder.ReadMessage(message));
+                            }
                         }
                         
                     }

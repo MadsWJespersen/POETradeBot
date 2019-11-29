@@ -2,10 +2,12 @@
 
 namespace POETestBot.Models
 {
-    public class UserCreateDTO
+    public class UserCreateDTO : DTO
     {
         [Required]
         public string Name { get; set; }
+
+
         
     }
 }

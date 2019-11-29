@@ -12,7 +12,11 @@ namespace POETestBot.Entities
         [Required]
         public int senderID { get; set; }
         public User sentBy { get; set; }
+
+
         public string textContent { get; set; }
+
+
 
     }
 }
