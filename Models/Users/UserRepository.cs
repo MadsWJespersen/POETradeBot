@@ -101,7 +101,7 @@ namespace POETestBot.Models
 
         public async Task<Response> UpdateAsync(UserUpdateDTO user)
         {
-            var entity = await _context.Users.FindAsync(user.ID);
+            var entity = await _context.Users.FindAsync(user.Name);
 
             if (entity == null)
             {

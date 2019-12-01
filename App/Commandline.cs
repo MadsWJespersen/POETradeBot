@@ -16,7 +16,7 @@ namespace POETradeBot
 {
     class CommandLine
     {
-        private readonly bool _debug;
+        public readonly bool _debug;
         private readonly Reader _reader;
         private readonly Rectangle _chatBoxBounds;
 
@@ -47,10 +47,13 @@ namespace POETradeBot
                             
                             Console.WriteLine(page.GetText());
                             var text = page.GetText().Replace("\n", " ");
+                            Console.WriteLine(text);
+                            Console.WriteLine(text.Replace("\"", ""));
                             var textAfter = new StringBuilder();
                             for(int i = 0; i < text.Length; i++)
                             {
-                                if (text[i] != '"')
+                                char character = text[i];
+                                if (character != '”')
                                 {
                                     textAfter.Append(text[i]);
                                 }
@@ -59,7 +62,8 @@ namespace POETradeBot
                             var arr = textAfter.ToString().Split('@');
                             foreach(string message in arr)
                             {
-                                Console.WriteLine(MessageBuilder.ReadMessage(message));
+                                Console.WriteLine(message);
+                                Console.WriteLine(MessageBuilder.ReadMessage(message,_debug));
                             }
                         }
                         

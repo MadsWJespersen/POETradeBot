@@ -9,7 +9,9 @@ namespace POETestBot.Models
 {
     public class ItemBuyDTO : DTO
     {
-        [Required]
         public string username { get; set; }
+        public string itemname { get; set; }
+        public (string,int) price { get; set; }
+        public (string,int,int) position { get; set; }
     }
 }

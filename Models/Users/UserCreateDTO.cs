@@ -6,8 +6,5 @@ namespace POETestBot.Models
     {
         [Required]
         public string Name { get; set; }
-
-
-        
     }
 }

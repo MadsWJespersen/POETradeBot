@@ -7,7 +7,7 @@ namespace POETradeBotTest
     [TestClass]
     public class UnitTest1
     {
-        [TestMethod]
+       /* [TestMethod]
         public void TestMethod1()
         {
             Reader reader = new Reader();
@@ -15,6 +15,6 @@ namespace POETradeBotTest
             var output = "køre til rødovre modis gang";
             Assert.Equals(output, thing);
 
-        }
+        }*/
     }
 }
