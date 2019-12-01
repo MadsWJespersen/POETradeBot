@@ -93,6 +93,23 @@ namespace App.Tests
         }
 
         [Fact]
+        public void PoeDotTradeTest_with_Apostrophe_in_itemname()
+        {
+
+            //Arrange
+            var input = "From xcredzz: Hi, | would like to buy your Lion’s Roar Granite Flask listed for 1 chance in Standard (stash tab 8; position: left 2, top 12) ";
+
+            //Act
+            ItemBuyDTO output = (ItemBuyDTO)MessageBuilder.ReadMessage(input, false);
+
+            //Assert
+            Assert.Equal("Lion’s Roar Granite Flask", output.itemname);
+            Assert.Equal("xcredzz", output.username);
+            Assert.Equal(("chance", 1), output.price);
+            Assert.Equal(("8", 2, 12), output.position);
+        }
+
+        [Fact]
         public void PoeDotTradeTest_fails_given_guildname_with_2_digits()
         {
             //Arrange
@@ -105,6 +122,7 @@ namespace App.Tests
             Assert.Equal("Input string was not in a correct format.", ex.Message);
 
         }
+
 
     }
 
@@ -143,6 +161,7 @@ namespace App.Tests
             Assert.Equal(("Exalted", 100), output.price);
 
         }
+
     }
 
     public class UserUpdate

@@ -19,14 +19,16 @@ namespace POETradeBot
         public readonly bool _debug;
         private readonly Reader _reader;
         private readonly Rectangle _chatBoxBounds;
+        private readonly Actor _actor;
 
-        public CommandLine(Reader reader, Rectangle chatBoxBounds,bool debug)
+        public CommandLine(Reader reader, Rectangle chatBoxBounds,Rectangle tradeBoxBounds, bool debug)
         {
             this._reader = reader;
             this._chatBoxBounds = chatBoxBounds;
+            this._actor = new Actor (tradeBoxBounds,Point.Empty);
             this._debug = debug;
         }
-
+        [STAThread]
         public void listenChat()
         {
             while (true)
@@ -44,13 +46,13 @@ namespace POETradeBot
                                 bmp.Save("currentImage.png", System.Drawing.Imaging.ImageFormat.Png);
                                 Console.ReadLine();
                             }
-                            
+
                             Console.WriteLine(page.GetText());
                             var text = page.GetText().Replace("\n", " ");
                             Console.WriteLine(text);
                             Console.WriteLine(text.Replace("\"", ""));
                             var textAfter = new StringBuilder();
-                            for(int i = 0; i < text.Length; i++)
+                            for (int i = 0; i < text.Length; i++)
                             {
                                 char character = text[i];
                                 if (character != '”')
@@ -60,15 +62,21 @@ namespace POETradeBot
                             }
                             Console.WriteLine(textAfter.ToString());
                             var arr = textAfter.ToString().Split('@');
-                            foreach(string message in arr)
+                            foreach (string message in arr)
                             {
                                 Console.WriteLine(message);
-                                Console.WriteLine(MessageBuilder.ReadMessage(message,_debug));
+                                Console.WriteLine(MessageBuilder.ReadMessage(message, _debug));
                             }
                         }
-                        
+
                     }
-                    
+
+                }
+
+                var bong = _actor.FindTradeItem();
+                foreach(var thing in bong)
+                {
+                    Console.WriteLine(thing);
                 }
                 Thread.Sleep(300);
             }
@@ -79,12 +87,9 @@ namespace POETradeBot
             return Screen.PrimaryScreen.Bounds.Width / SystemParameters.PrimaryScreenWidth;
         }
 
+        [STAThread]
         public static void Main(String[] args)
         {
-            Reader reader = new Reader();
-            var thong = reader.CheckImage(@"D:\code\POETradeBot\POETradeBotTest\testdata\test4.PNG");
-            Console.WriteLine(thong);
-
             var thing = ConsoleKey.Escape;
             while (thing != ConsoleKey.Enter)
             {
@@ -92,6 +97,7 @@ namespace POETradeBot
                 thing = Console.ReadKey().Key;
             }
             var point1 = Cursor.Position;
+            
 
             thing = ConsoleKey.Escape;
             while (thing != ConsoleKey.Enter)
@@ -100,7 +106,7 @@ namespace POETradeBot
                 thing = Console.ReadKey().Key;
             }
             var point2 = Cursor.Position;
-            bool debug = false;
+            
             
             //Adjust the captured points for screen zoom
             var zoomfactor = GetWindowsScaling();
@@ -108,9 +114,38 @@ namespace POETradeBot
             point1.Y = (int) (point1.Y * zoomfactor);
             point2.X = (int) (point2.X * zoomfactor);
             point2.Y = (int) (point2.Y * zoomfactor);
-            
+
+            var chatBoxBounds = new Rectangle(point1.X, point1.Y, point2.X - point1.X, point2.Y - point1.Y);
+
+            thing = ConsoleKey.Escape;
+            while (thing != ConsoleKey.Enter)
+            {
+                Console.WriteLine("press enter while the cursor is over the top left corner of the trade window");
+                thing = Console.ReadKey().Key;
+            }
+            point1 = Cursor.Position;
+            Console.WriteLine("true top left " + point1.X + "," + point1.Y);
+            thing = ConsoleKey.Escape;
+            while (thing != ConsoleKey.Enter)
+            {
+                Console.WriteLine("press enter while the cursor is over the bottom right corner of the trade window");
+                thing = Console.ReadKey().Key;
+            }
+            point2 = Cursor.Position;
+            Console.WriteLine("true bottom right " + point2.X + "," + point2.Y);
+
+
+            //Adjust the captured points for screen zoom
+            point1.X = (int)(point1.X );
+            point1.Y = (int)(point1.Y );
+            point2.X = (int)(point2.X );
+            point2.Y = (int)(point2.Y );
+
+            var tradeBoxBounds = new Rectangle(point1.X, point1.Y, point2.X - point1.X, point2.Y - point1.Y);
+
+            bool debug = false;
             if (Console.ReadLine().Equals("Debug")) debug = true;
-            new CommandLine(new Reader(), new Rectangle(point1.X, point1.Y, point2.X - point1.X, point2.Y - point1.Y), debug).listenChat();
+            new CommandLine(new Reader(), chatBoxBounds,tradeBoxBounds, debug).listenChat();
         }
     }
 }

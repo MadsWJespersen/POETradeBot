@@ -19,7 +19,7 @@ namespace POETradeBot
 
         //Components
         private static string startPattern = $"^From (?<guild><....?.?.?>)? ?(?<user>[a-zA-Z_ÉéÍíÓóÁáÚú]*):";
-        private static string itemPattern = "(?<item>[a-zA-Z' ]*?)";
+        private static string itemPattern = "(?<item>[a-zA-Z'’ ]*?)";
         private static string pricePattern = "(?<amount>[0-9]*)( |,)(?<currency>[a-zA-Z]*)";
         private static string tabPositionPattern = "(?<tab>[a-zA-Z 0-9]*).*?left (?<x>[1-9][1-9]?), top (?<y>[1-9][1-9]?)";
         private static string passwordPattern = "(?<password>[0-9a-zA-Z_æøåÆØÅ\\.*^`´'_z\\/!#@¤\\>\\<~$%&\\(\\)=\\?!\\|{},\\\\ \":;|+\\/\\-]*)";

@@ -123,6 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actor.cs" />
     <Compile Include="Commandline.cs" />
     <Compile Include="MessageBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
