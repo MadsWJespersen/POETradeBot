@@ -21,11 +21,11 @@ namespace POETradeBot
         private readonly Rectangle _chatBoxBounds;
         private readonly Actor _actor;
 
-        public CommandLine(Reader reader, Rectangle chatBoxBounds,Rectangle tradeBoxBounds, bool debug)
+        public CommandLine(Reader reader, Rectangle chatBoxBounds, Actor actor, bool debug)
         {
             this._reader = reader;
             this._chatBoxBounds = chatBoxBounds;
-            this._actor = new Actor (tradeBoxBounds,Point.Empty);
+            this._actor = actor;
             this._debug = debug;
         }
         [STAThread]
@@ -73,11 +73,8 @@ namespace POETradeBot
 
                 }
 
-                var bong = _actor.FindTradeItem();
-                foreach(var thing in bong)
-                {
-                    Console.WriteLine(thing);
-                }
+                _actor.GetStashItem(1,1);
+                
                 Thread.Sleep(300);
             }
         }
@@ -124,7 +121,7 @@ namespace POETradeBot
                 thing = Console.ReadKey().Key;
             }
             point1 = Cursor.Position;
-            Console.WriteLine("true top left " + point1.X + "," + point1.Y);
+            
             thing = ConsoleKey.Escape;
             while (thing != ConsoleKey.Enter)
             {
@@ -132,20 +129,45 @@ namespace POETradeBot
                 thing = Console.ReadKey().Key;
             }
             point2 = Cursor.Position;
-            Console.WriteLine("true bottom right " + point2.X + "," + point2.Y);
-
-
-            //Adjust the captured points for screen zoom
-            point1.X = (int)(point1.X );
-            point1.Y = (int)(point1.Y );
-            point2.X = (int)(point2.X );
-            point2.Y = (int)(point2.Y );
-
             var tradeBoxBounds = new Rectangle(point1.X, point1.Y, point2.X - point1.X, point2.Y - point1.Y);
+
+            thing = ConsoleKey.Escape;
+            while (thing != ConsoleKey.Enter)
+            {
+                Console.WriteLine("press enter while the cursor is over accept button of the trade window");
+                thing = Console.ReadKey().Key;
+            }
+            var acceptButton = Cursor.Position;
+
+            thing = ConsoleKey.Escape;
+            while (thing != ConsoleKey.Enter)
+            {
+                Console.WriteLine("press enter while the cursor is over the top left corner of the stash window");
+                thing = Console.ReadKey().Key;
+            }
+            point1 = Cursor.Position;
+
+            thing = ConsoleKey.Escape;
+            while (thing != ConsoleKey.Enter)
+            {
+                Console.WriteLine("press enter while the cursor is over the bottom right corner of the stash window");
+                thing = Console.ReadKey().Key;
+            }
+            point2 = Cursor.Position;
+            var stashBoxBounds = new Rectangle(point1.X, point1.Y, point2.X - point1.X, point2.Y - point1.Y);
+
+            thing = ConsoleKey.Escape;
+            while (thing != ConsoleKey.Enter)
+            {
+                Console.WriteLine("press enter while the cursor is over the stash");
+                thing = Console.ReadKey().Key;
+            }
+            var stash = Cursor.Position;
 
             bool debug = false;
             if (Console.ReadLine().Equals("Debug")) debug = true;
-            new CommandLine(new Reader(), chatBoxBounds,tradeBoxBounds, debug).listenChat();
+            var actor = new Actor(tradeBoxBounds, acceptButton, stashBoxBounds, stash);
+            new CommandLine(new Reader(), chatBoxBounds, actor, debug).listenChat();
         }
     }
 }
